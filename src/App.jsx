@@ -17,15 +17,15 @@ function App() {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       const sortedPlaces = sortPlacesByDistance(
-        AVAILABLE_PLACES, 
-        position.coords.latitude, 
+        AVAILABLE_PLACES,
+        position.coords.latitude,
         position.coords.longitude,
       );
-  
+
       setAvailablePlaces(sortedPlaces);
-    });  
+    });
   }, []);
-  
+
 
   function handleStartRemovePlace(id) {
     modal.current.open();
@@ -44,6 +44,11 @@ function App() {
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    if (storedIds.indexOf(id) === -1) {
+      localStorage.setItem('selectedPlaces', JSON.stringify([id, ...storedIds]));
+    }
   }
 
   function handleRemovePlace() {
